@@ -1,3 +1,4 @@
+// Define pin numbers for LEDs and buttons
 #define led1 A15
 #define led2 A14
 #define led3 A13
@@ -53,16 +54,17 @@
 #define bouton63 52
 
 
-//char bouton[14]={'0','0','0','0','0','0','0','0','0','0','0','0','0','0'};
-char bouton[15]={'00000000000000'};
-char led[10]={A15,A6,A7,A8,A9,A10,A11,A12,A13,A14};
-//char ledrecu[10]={'0','0','0','0','0','0','0','0','0','0'};
-char ledrecu[11]={'1111111111'};
-char bufferrecu[10];
-char endline = 5;
-int i =0;
-int r = 1;
+// Define character arrays for button states and received LED states
+char bouton[15] = {'00000000000000'}; // Initialized to all zeros
+char ledrecu[11] = {'1111111111'};    // Initialized to all ones (assuming this is the default state)
+char bufferrecu[10];                   // Buffer for received LED states
+char endline = 5;                      // Endline character for serial communication
+int i = 0;                             // Loop variable
+int r = 1;                             // Unused variable
+
+
 void setup() {
+    // Set LED pins as outputs and button pins as inputs with pull-up resistors
 pinMode(led1, OUTPUT);
 pinMode(led2, OUTPUT);
 pinMode(led3, OUTPUT);
@@ -121,7 +123,7 @@ Serial.setTimeout(500);
 }
 
 void loop() {
-
+ // Read buttons states and update bouton array accordingly
 if (digitalRead(bouton11)==false ){
 bouton[0]={'2'};  
 }
@@ -306,7 +308,7 @@ else {
  bouton[13]={'0'};  
 }
 
-
+  // Set LEDs based on received LED states
 for (i=0;i<10;i++){
   if (ledrecu[i]=='1'){
 
@@ -317,36 +319,20 @@ else{
   digitalWrite(led[i],LOW);
 }
 }
-/*
-digitalWrite(led3, HIGH);
-digitalWrite(led4, HIGH);
-digitalWrite(led5, HIGH);
-digitalWrite(led6, HIGH);
-digitalWrite(led7, HIGH);
-digitalWrite(led8, HIGH);
-digitalWrite(led9, HIGH);
-digitalWrite(led10, HIGH);*/
-delay(100);/*
-digitalWrite(led1, LOW);
-digitalWrite(led2, LOW);
-digitalWrite(led3, LOW);
-digitalWrite(led4, LOW);
-digitalWrite(led5, LOW);
-digitalWrite(led6, LOW);
-digitalWrite(led7, LOW);
-digitalWrite(led8, LOW);*/
+// Delay for stability
+delay(100);
 
 
 
-//for ( i =0;i<14;i++){
+
+  // Send bouton state via serial
 Serial.println(bouton);
-//Serial.write('a');
 
-
-//Serial.println(ledrecu);
 
 
 delay(10);
+
+  // Receive LED states from serial
 while(Serial.available()){ //From RPi to Arduino
   if (Serial.read()=='z'){
     
